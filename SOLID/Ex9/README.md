@@ -51,3 +51,7 @@ FINAL: PASS (total=90)
 
 ## 10. Stretch goals
 - Add a second grading strategy without editing pipeline logic.
+
+Answer:-
+initially the `EvaluationPipeline` class directly creates instances of `PlagiarismChecker`, `CodeGrader`, and `ReportWriter` using `new`. This tightly couples the pipeline to specific implementations, making it difficult to test or change components without modifying the pipeline code.
+Define 3 small interfaces (abstractions) Make concrete classes implement the interfaces like `PlagiarismCheckerImpl`, `CodeGraderImpl`, and `ReportWriterImpl`. Then, modify the `EvaluationPipeline` to depend on these interfaces instead of concrete classes. Inject the dependencies through the constructor, allowing for easy substitution of test doubles or alternative implementations without changing the pipeline logic.

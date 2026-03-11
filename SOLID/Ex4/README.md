@@ -53,3 +53,7 @@ Saved booking: H-7781
 
 ## 10. Stretch goals
 - Add “late fee” rule without editing the main calculation loop.
+
+
+Answer:Initially in the HostelFeeCalculator where was switch case implemented which lead to open-close principle violation and in which money was calculated , adds on branching is also done in the same class without proper use abstraction printing and persistence is also done in the same , so we make a 
+Make a separate class for make a interface of PriceCalculator which will have a empty method getPrice , now make a class SingleRoom , DoubleRoom , etc which will implement PriceCalculator with overriding the method getPrice, now similarly GymPrice , MessPrice , LaundryPrice which will implement PriceCalculator with overriding the method getPrice now at the HostelFeeCalculator we will not need any calculateMonthly method anymore we will call PriceCalculator from all the class to calculate total .

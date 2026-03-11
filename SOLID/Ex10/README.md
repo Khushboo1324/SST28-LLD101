@@ -49,3 +49,15 @@ RECEIPT: R-501 | fare=90.00
 
 ## 10. Stretch goals
 - Add a “mock” allocator and gateway for tests without touching booking logic.
+
+
+Answer:
+initially the `TransportBookingService` class directly creates instances of `PaymentGateway`, `DriverAllocator`, and `DistanceCalculator` using `new`. This tightly couples the booking logic to specific implementations, making it difficult to test or change components without modifying the service code.
+
+To adhere to the Dependency Inversion Principle (DIP), we can introduce interfaces for each of these components:
+
+1. `PaymentGateway` interface with methods like `processPayment()`.
+2. `DriverAllocator` interface with methods like `allocateDriver()`.
+3. `DistanceCalculator` interface with methods like `calculateDistance()`.
+
+Then, we create concrete implementations for each interface, such as `StripePaymentGateway`, `UberDriverAllocator`, and `GoogleDistanceCalculator`. Finally, we modify the `TransportBookingService` to depend on these interfaces instead of concrete classes. We can inject the dependencies through the constructor, allowing for easy substitution of test doubles or alternative implementations without changing the booking logic.

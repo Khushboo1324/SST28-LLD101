@@ -55,3 +55,21 @@ AC OFF
 
 ## 10. Stretch goals
 - Add a “smart board” device without implementing unrelated methods.
+
+
+Answer :
+7.Initially all every device is forced to implement ALL 6 methods, even if they make no sense for that device. In the SmartClassroomDevice
+Interface , Projector class which implements SmartClassrommDevice 4 out of 6 methods are dummies A projector cannot set brightness or temperature or scan attendance , but the interface forces it to pretend it can, LightPanel class which implements SmartClassrommDevice 3 out of 6 methods are dummies ,Airconditior 3 are dummies and similarly with AttendanceScanner The scanner only scans  yet it has to fake 5 other methods! The ClassroomController gets back a SmartClassroomDevice — which means legally it could call pj.setTemperatureC(24) on a projector and the code would compile fine! It just silently does nothing. This is dangerous and misleading.
+
+The fix is to break SmartClassroomDevice into small, focused capability interfaces, one per ability:
+Switchable       → powerOn(), powerOff()
+Dimmable         → setBrightness(int pct)
+TemperatureCtrl  → setTemperatureC(int c)
+InputConnectable → connectInput(String port)
+AttendanceSensor → scanAttendance()
+Then each device class implements only the interfaces relevant to it:
+Projector        → Switchable, InputConnectable
+LightPanel       → Switchable, Dimmable
+AirConditioner   → Switchable, TemperatureCtrl
+AttendanceScanner → Switchable, AttendanceSensor
+The ClassroomController can depend on the specific capabilities it needs for each device, rather than the whole fat interface. This way, there are no dummy methods, and the design accurately models the real capabilities of each device. Adding a new device is also easier, as it only needs to implement the relevant interfaces without being forced to provide meaningless implementations.

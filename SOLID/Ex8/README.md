@@ -50,3 +50,21 @@ Summary: ledgerBalance=5000, minutes=1, events=1
 
 ## 10. Stretch goals
 - Add “publicity lead” without implementing finance methods.
+
+Answer:
+initially , the `ClubAdminTools` interface is a fat interface that includes methods for finance, minutes, and event operations. This violates the Interface Segregation Principle (ISP) because clients (like `ClubConsole`) are forced to depend on methods they do not use. To refactor this, we can split the `ClubAdminTools` interface into smaller, more specific interfaces that correspond to the different roles in the club.
+like in TreasureTool class which is implements all the methods but  3 are dummies like irrelavent to the role of Treasurer, similarly in SectaryTool 4 dummuies The secretary only takes notes — yet has to fake all financial and event methods. and EventLeadTool 3 dummies classes . ClubConsole could legally call treasurer.createEvent(...) or secretary.addIncome(...) — the compiler won't stop it. It would silently do nothing (dummy), which is dangerous.
+
+Break ClubAdminTools into 3 small, role-based interfaces:
+like FinanceTools ,MinutesTools, EventTools. Each role tool implements only the relevant interface(s). For example:
+```java
+interface FinanceTools {
+    void addIncome(int amount);
+    void addExpense(int amount);
+}    
+interface MinutesTools {
+    void addMinutes(String minutes);
+}
+interface EventTools { 
+    void createEvent(String name, int budget);
+}

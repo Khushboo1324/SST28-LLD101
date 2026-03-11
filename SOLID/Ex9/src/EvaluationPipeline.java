@@ -11,7 +11,7 @@ public class EvaluationPipeline {
 
         int code = grader.grade(sub, rubric);
         System.out.println("CodeScore=" + code);
-
+           
         String reportName = writer.write(sub, plag, code);
         System.out.println("Report written: " + reportName);
 
